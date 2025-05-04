@@ -5,6 +5,50 @@
 ## Overview
 
 The **WindForLife API** is a **Django REST Framework (DRF)** based API for collecting and analyzing wind data from anemometers.
+The API allows authenticated users to:
+
+- Manage **anemometers** (CRUD operations).
+- Submit **wind speed readings** for anemometers.
+- Retrieve **statistics** (min, max, mean wind speed) within a specified geographic area.
+- Filter anemometer readings based on **tags**.
+- View the **latest wind speed readings** for each anemometer.
+- Secure authentication using **JWT tokens**.
+- API documentation via **Swagger UI (drf-spectacular)**.
+
+## Features
+
+- **RESTful API**: Built using Django REST Framework (DRF).
+- **Authentication**: Secure access via **JWT authentication**.
+- **Filtering & Pagination**: Supports **Django Filters** for anemometer readings.
+- **Logging**: Integrated **logging system** to track API requests and debugging.
+- **Swagger Documentation**: API documentation accessible via Swagger UI.
+- **Docker Support**: Easily deployable with Docker.
+
+---
+
+## API Endpoints
+
+### **Authentication**
+
+- `POST /api/token/` - Obtain JWT access token.
+- `POST /api/token/refresh/` - Refresh JWT token.
+
+### **Anemometers**
+
+- `GET /api/anemometers/` - List all anemometers (paginated).
+- `POST /api/anemometers/` - Create a new anemometer.
+- `GET /api/anemometers/{id}/` - Retrieve a single anemometer.
+- `PUT /api/anemometers/{id}/` - Update an anemometer.
+- `DELETE /api/anemometers/{id}/` - Delete an anemometer.
+
+### **Wind Speed Readings**
+
+- `POST /api/readings/` - Submit a wind speed reading.
+- `GET /api/readings/` - List all readings (filterable by tags).
+
+### **Statistics**
+
+- `GET /api/stats/?latitude=34.0522&longitude=-118.2437&radius=10` - Retrieve wind speed statistics within a radius.
 
 ---
 
@@ -14,6 +58,19 @@ The **WindForLife API** is a **Django REST Framework (DRF)** based API for colle
 
 ```
 WIND-DJANGO-API/
+├── api/
+│   ├── fixtures/
+│   │   ├── seed.json
+│   ├── migrations/
+│   ├── admin.py
+│   ├── apps.py
+│   ├── factories.py
+│   ├── filter.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
 ├── windforlife/
 │   ├── settings/
 │   │   ├── base.py
@@ -164,7 +221,13 @@ source venv/bin/activate
 
 ### Testing Setup
 
-1. **Run unit tests**
+1. **Add dummy data to test locally**
+
+   ```bash
+   python manage.py loaddata api/fixtures/seed.json
+   ```
+
+2. **Run unit tests**
 
    ```bash
    pytest
