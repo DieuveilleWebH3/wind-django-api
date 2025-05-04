@@ -109,7 +109,6 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API for collecting and analyzing wind data from anemometers.',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    'SERVE_INCLUDE_SCHEMA': False,
     'SWAGGER_UI_SETTINGS': {
         'persistAuthorization': True
     },
