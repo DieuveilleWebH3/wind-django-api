@@ -1,0 +1,82 @@
+[
+    {
+        "model": "api.anemometer",
+        "pk": 1,
+        "fields": {
+            "name": "Coastal Anemometer",
+            "latitude": 34.0522,
+            "longitude": -118.2437,
+            "tags": ["coastal", "high-wind"],
+            "created_at": "2024-02-21T10:00:00Z"
+        }
+    },
+    {
+        "model": "api.anemometer",
+        "pk": 2,
+        "fields": {
+            "name": "Mountain Anemometer",
+            "latitude": 39.7392,
+            "longitude": -104.9903,
+            "tags": ["mountain", "cold-weather"],
+            "created_at": "2024-02-21T11:00:00Z"
+        }
+    },
+    {
+        "model": "api.anemometer",
+        "pk": 3,
+        "fields": {
+            "name": "Desert Anemometer",
+            "latitude": 36.7783,
+            "longitude": -119.4179,
+            "tags": ["desert", "hot-weather"],
+            "created_at": "2024-02-21T12:00:00Z"
+        }
+    },
+    {
+        "model": "api.anemometer",
+        "pk": 4,
+        "fields": {
+            "name": "Urban Anemometer",
+            "latitude": 40.7128,
+            "longitude": -74.0060,
+            "tags": ["urban", "moderate-wind"],
+            "created_at": "2024-02-21T13:00:00Z"
+        }
+    },
+    {
+        "model": "api.windspeedreading",
+        "pk": 1,
+        "fields": {
+            "anemometer": 1,
+            "speed_knots": 15.5,
+            "recorded_at": "2024-02-21T12:00:00Z"
+        }
+    },
+    {
+        "model": "api.windspeedreading",
+        "pk": 2,
+        "fields": {
+            "anemometer": 2,
+            "speed_knots": 20.2,
+            "recorded_at": "2024-02-21T13:00:00Z"
+        }
+    },
+    {
+        "model": "api.windspeedreading",
+        "pk": 3,
+        "fields": {
+            "anemometer": 3,
+            "speed_knots": 10.3,
+            "recorded_at": "2024-02-21T14:00:00Z"
+        }
+    },
+    {
+        "model": "api.windspeedreading",
+        "pk": 4,
+        "fields": {
+            "anemometer": 4,
+            "speed_knots": 8.7,
+            "recorded_at": "2024-02-21T15:00:00Z"
+        }
+    }
+]
