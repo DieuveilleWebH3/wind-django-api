@@ -13,6 +13,8 @@ INSTALLED_APPS += ["debug_toolbar"]
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 
+WSGI_APPLICATION = "windforlife.wsgi.dev.application"
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 

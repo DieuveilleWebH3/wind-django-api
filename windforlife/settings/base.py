@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "windforlife.wsgi.application"
+# WSGI_APPLICATION = "windforlife.wsgi.application"
 
 
 # Database
