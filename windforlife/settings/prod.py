@@ -2,7 +2,7 @@ from windforlife.settings.base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
 WSGI_APPLICATION = "windforlife.wsgi.prod.application"
 

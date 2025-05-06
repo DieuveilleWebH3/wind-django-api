@@ -23,4 +23,4 @@ COPY . /app
 EXPOSE 8000
 
 # Run gunicorn server for production
-CMD ["gunicorn", "windforlife.wsgi:application", "--bind", "0.0.0.0:8000", "--workers=4"]
+CMD ["gunicorn", "windforlife.wsgi.prod:application", "--bind", "0.0.0.0:8000", "--workers=4"]

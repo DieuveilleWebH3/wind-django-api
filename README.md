@@ -122,6 +122,14 @@ WIND-DJANGO-API/
    cd wind-django-api
    ```
 
+2. **Create a `.env` file**
+
+   ```bash
+   cp example.env .env
+   ```
+
+   Replace the values in the `.env` file with the right and appropriate values.
+
 ---
 
 #### Virtual Environment Setup
@@ -145,17 +153,7 @@ source venv/bin/activate
       pip install -r requirements.prod.txt
       ```
 
-2. **Create a `.env` file**
-
-   ```bash
-   cp example.env .env
-   ```
-
-   Replace the values in the `.env` file with the right values.
-
-   <br>
-
-3. **Run the migrations**
+2. **Run the migrations**
 
    **Dev Environment**
 
@@ -169,7 +167,7 @@ source venv/bin/activate
       python manage.py migrate --settings=windforlife.settings.prod
       ```
 
-4. **Run the server for dev environment**
+3. **Run the server for dev environment**
 
    **Create superuser**
 
@@ -181,7 +179,7 @@ source venv/bin/activate
    python manage.py runserver --settings=windforlife.settings.dev
    ```
 
-5. **Run the server for prod environment**
+4. **Run the server for prod environment**
 
    **Create superuser**
 
@@ -244,5 +242,48 @@ source venv/bin/activate
     ```bash
     pytest --cov=api --cov-report=html
     ```
+
+---
+
+### Common Issues
+
+#### Docker cannot access local host PostgreSQL Database
+
+1. **Verify PostgreSQL Host**
+
+   The localhost in your Docker container refers to the container itself, not your host machine.
+   If PostgreSQL is running on your host machine, you need to use the host's IP address or host.docker.internal (on Docker Desktop for Windows/Mac).
+
+   <br>
+
+   Update your .env file to use host.docker.internal for DB_HOST:
+
+   ```bash
+   DB_HOST=host.docker.internal
+   ```
+
+2. **Expose PostgreSQL to the Docker Container**
+
+   Ensure PostgreSQL is configured to accept connections from the Docker container.
+
+   <br>
+
+   Edit pg_hba.conf: Locate the pg_hba.conf file (usually in the PostgreSQL data directory) and add the following line:
+
+   ```bash
+   host    all             all             0.0.0.0/0            md5
+   ```
+
+   Edit postgresql.conf: Locate the postgresql.conf file and ensure the listen_addresses setting includes *:
+
+   ```bash
+   listen_addresses = '*'
+   ```
+
+   Restart PostgreSQL: Restart the PostgreSQL service to apply the changes:
+
+   ```bash
+   sudo systemctl restart postgresql
+   ````
 
 ---
