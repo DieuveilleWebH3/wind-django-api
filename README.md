@@ -284,6 +284,6 @@ source venv/bin/activate
 
    ```bash
    sudo systemctl restart postgresql
-   ````
+   ```
 
 ---
