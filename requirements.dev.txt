@@ -1,0 +1,14 @@
+-r requirements.txt
+
+coverage==7.6.12
+
+django-debug-toolbar==4.3.0
+
+factory_boy==3.3.3
+
+Faker==36.1.1
+freezegun==1.5.1
+
+pytest==8.3.4
+pytest-cov==6.0.0
+pytest-django==4.10.0
