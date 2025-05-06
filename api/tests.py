@@ -108,36 +108,42 @@ def test_read_anemometer_filter_by_tags():
 
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
     AnemometerFactory(
+        id=1,
         name='Anemometer 1',
         latitude=-29.0022675,
         longitude=-101.028684,
         tags=['coastal', "low-wind"],
     )
     AnemometerFactory(
+        id=2,
         name='Anemometer 2',
         latitude=35.5340375,
         longitude=-122.46333,
         tags=['coastal', "high-wind"],
     )
     AnemometerFactory(
+        id=3,
         name='Anemometer 3',
         latitude=23.750874,
         longitude=-75.512717,
         tags=['desert', "hot-weather"],
     )
     AnemometerFactory(
+        id=4,
         name='Anemometer 4',
         latitude=35.5340375,
         longitude=-122.46333,
         tags=['desert', "high-wind"],
     )
     AnemometerFactory(
+        id=5,
         name='Anemometer 5',
         latitude=35.5340375,
         longitude=-122.46333,
         tags=['mountain', "cold-weather"],
     )
     AnemometerFactory(
+        id=6,
         name='Anemometer 6',
         latitude=35.5340375,
         longitude=-122.46333,
