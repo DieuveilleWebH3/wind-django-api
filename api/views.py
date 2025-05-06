@@ -23,7 +23,7 @@ logger = logging.getLogger("api")
 
 @extend_schema(tags=['Anemometers'])
 class AnemometerViewSet(viewsets.ModelViewSet):
-    queryset = Anemometer.objects.all()
+    queryset = Anemometer.objects.prefetch_related('readings')
     serializer_class = AnemometerSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]

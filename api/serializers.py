@@ -23,11 +23,13 @@ class AnemometerSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(serializers.ListSerializer(child=WindSpeedReadingSerializer()))
     def get_latest_readings(self, obj):
-        return WindSpeedReadingSerializer(obj.readings.all()[:5], many=True).data
+        latest_readings = obj.readings.order_by('-recorded_at')[:5]
+        return WindSpeedReadingSerializer(latest_readings, many=True).data
 
     def get_daily_mean_speed(self, obj):
-        today = now().date()
-        daily_readings = obj.readings.filter(recorded_at__date=today)
+        start_of_day = now().replace(hour=0, minute=0, second=0, microsecond=0)
+        end_of_day = now().replace(hour=23, minute=59, second=59, microsecond=999999)
+        daily_readings = obj.readings.filter(recorded_at__range=(start_of_day, end_of_day))
         return daily_readings.aggregate(Avg('speed_knots'))['speed_knots__avg'] or 0
     
     def get_weekly_mean_speed(self, obj):

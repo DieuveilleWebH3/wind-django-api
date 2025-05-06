@@ -7,8 +7,8 @@ from django.utils.timezone import now
 
 class Anemometer(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    latitude = models.FloatField(db_index=True)
+    longitude = models.FloatField(db_index=True)
     tags = models.JSONField(default=list)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -21,7 +21,7 @@ class Anemometer(models.Model):
 class WindSpeedReading(models.Model):
     anemometer = models.ForeignKey(Anemometer, on_delete=models.CASCADE, related_name='readings')
     speed_knots = models.FloatField()
-    recorded_at = models.DateTimeField(default=now)
+    recorded_at = models.DateTimeField(default=now, db_index=True)
 
     class Meta:
         ordering = ['-recorded_at']
