@@ -1,31 +1,23 @@
 import django_filters
 from .models import Anemometer
-from django.db.models import JSONField, Q, QuerySet
-from django_filters.filters import BaseInFilter, CharFilter
+from django.db.models import Q, QuerySet
+from django_filters.filters import CharFilter
 
-class TagsFilter(BaseInFilter, CharFilter):
-    pass
 
 class AnemometerFilter(django_filters.FilterSet):
-    # tags = TagsFilter(field_name='tags', lookup_expr='icontains')
-    tags = CharFilter(method='filter_tags')
+    tags = CharFilter(method='filter_tags', help_text="Filter by tags (comma-separated).")
 
     class Meta:
         model = Anemometer
         fields = ['tags']
-        filter_overrides = {
-            JSONField: {
-                'filter_class': CharFilter,
-            },
-        }
-
-    def filter_tags(self, queryset: QuerySet, name, value: str) -> QuerySet:
-        if "," in value:
-            tag_list: list[str] =[tag.strip() for tag in value.split(",") if tag != ""]
+    def filter_tags(self, queryset: QuerySet, name: str, value: str) -> QuerySet:
+        """
+        Filters the queryset based on a comma-separated list of tags.
+        """
+        tag_list = [tag.strip() for tag in value.split(",") if tag.strip()]
+        if tag_list:
             query = Q()
             for tag in tag_list:
                 query |= Q(tags__icontains=tag)
-            queryset: QuerySet = queryset.filter(query)
-            return queryset
-        else:
-            return queryset.filter(tags__icontains=value)
+            return queryset.filter(query)
+        return queryset

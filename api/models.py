@@ -6,9 +6,9 @@ from django.utils.timezone import now
 
 
 class Anemometer(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    name = models.CharField(max_length=255, unique=True, db_index=True)
+    latitude = models.FloatField(db_index=True)
+    longitude = models.FloatField(db_index=True)
     tags = models.JSONField(default=list)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -17,11 +17,14 @@ class Anemometer(models.Model):
 
     class Meta:
         ordering = ['name']
+        indexes = [
+            models.Index(fields=['latitude', 'longitude']),  # Composite index for spatial queries
+        ]
 
 class WindSpeedReading(models.Model):
-    anemometer = models.ForeignKey(Anemometer, on_delete=models.CASCADE, related_name='readings')
+    anemometer = models.ForeignKey(Anemometer, on_delete=models.CASCADE, related_name='readings', db_index=True)  # Explicit index
     speed_knots = models.FloatField()
-    recorded_at = models.DateTimeField(default=now)
+    recorded_at = models.DateTimeField(default=now, db_index=True)
 
     class Meta:
         ordering = ['-recorded_at']
