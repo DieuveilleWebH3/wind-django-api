@@ -6,7 +6,8 @@ on:
       - main
 
 jobs:
-  test:
+  test-coverage-check:
+    name: Prod Coverage Test (${{ github.base_ref }})
     runs-on: ubuntu-latest
 
     permissions:

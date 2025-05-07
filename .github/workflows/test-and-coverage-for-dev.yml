@@ -6,7 +6,8 @@ on:
       - dev
 
 jobs:
-  test:
+  test-coverage-check:
+    name: Dev Coverage Test (${{ github.base_ref }})
     runs-on: ubuntu-latest
 
     permissions:
