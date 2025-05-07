@@ -36,11 +36,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.dev.txt
 
       - name: Run tests with coverage
         run: |
-          pytest --cov=api --cov-fail-under=100
+          pytest --cov=api --cov-report=term --cov-fail-under=100 > result.log || (cat result.log && exit 1)
+          if ! grep -q "test session starts" result.log; then
+            echo "No tests were detected." && exit 1
+          fi
 
       - name: Upload coverage report
         if: always()
@@ -48,3 +51,9 @@ jobs:
         with:
           name: coverage-report
           path: htmlcov
+
+      - name: Comment test results on PR
+        if: always()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: result.log
