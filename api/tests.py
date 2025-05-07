@@ -251,6 +251,8 @@ def test_read_anemometer_filter_by_no_tags():
         longitude=-122.46333,
         tags=['urban', "modern-wind"],
     )
+    # The comma in the `tags` parameter is used to represent a query for all anemometers,
+    # regardless of their tags. This is a convention used by the API to indicate no specific tag filter.
     response = client.get('/api/anemometers/?tags=,')
     assert response.status_code == 200
     assert response.json()['count'] == 6
