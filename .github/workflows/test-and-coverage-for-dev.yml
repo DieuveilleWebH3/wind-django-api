@@ -9,6 +9,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    permissions:
+      pull-requests: write  # Grant write permissions to post comments
+
+    env:
+      SECRET_KEY: dummy-secret-key-for-ci
+
     services:
       postgres:
         image: postgres:14
