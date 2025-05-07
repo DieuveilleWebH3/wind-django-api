@@ -198,6 +198,152 @@ def test_read_anemometer_filter_by_tags():
     ]
 
 @pytest.mark.django_db
+@freezegun.freeze_time(datetime(2025, 2, 22, 14, 6, 26, 484813, tzinfo=timezone.utc))
+def test_read_anemometer_filter_by_no_tags():
+    client = APIClient()
+    user = UserFactory()
+    user.set_password('testpass')
+    user.save()  # Ensure the password is hashed and user is saved
+    response = client.post('/api/token/', {'username': user.username, 'password': 'testpass'})
+    assert response.status_code == 200, response.content  # Ensure token request succeeds
+    token = response.data['access']
+
+    client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+    AnemometerFactory(
+        id=1,
+        name='Anemometer 1',
+        latitude=-29.0022675,
+        longitude=-101.028684,
+        tags=['coastal', "low-wind"],
+    )
+    AnemometerFactory(
+        id=2,
+        name='Anemometer 2',
+        latitude=35.5340375,
+        longitude=-122.46333,
+        tags=['coastal', "high-wind"],
+    )
+    AnemometerFactory(
+        id=3,
+        name='Anemometer 3',
+        latitude=23.750874,
+        longitude=-75.512717,
+        tags=['desert', "hot-weather"],
+    )
+    AnemometerFactory(
+        id=4,
+        name='Anemometer 4',
+        latitude=35.5340375,
+        longitude=-122.46333,
+        tags=['desert', "high-wind"],
+    )
+    AnemometerFactory(
+        id=5,
+        name='Anemometer 5',
+        latitude=35.5340375,
+        longitude=-122.46333,
+        tags=['mountain', "cold-weather"],
+    )
+    AnemometerFactory(
+        id=6,
+        name='Anemometer 6',
+        latitude=35.5340375,
+        longitude=-122.46333,
+        tags=['urban', "modern-wind"],
+    )
+    # The comma in the `tags` parameter is used to represent a query for all anemometers,
+    # regardless of their tags. This is a convention used by the API to indicate no specific tag filter.
+    response = client.get('/api/anemometers/?tags=,')
+    assert response.status_code == 200
+    assert response.json()['count'] == 6
+    assert response.json()['results'] == [
+        {
+           'created_at': '2025-02-22T14:06:26.484813Z',
+            'daily_mean_speed': 0,
+            'id': 1,
+            'latest_readings': [],
+           'latitude': -29.0022675,
+           'longitude': -101.028684,
+           'name': 'Anemometer 1',
+            'tags': [
+                'coastal',
+                'low-wind',
+            ],
+            'weekly_mean_speed': 0,
+        },
+        {
+           'created_at': '2025-02-22T14:06:26.484813Z',
+            'daily_mean_speed': 0,
+            'id': 2,
+            'latest_readings': [],
+           'latitude': 35.5340375,
+           'longitude': -122.46333,
+           'name': 'Anemometer 2',
+            'tags': [
+                'coastal',
+                'high-wind',
+            ],
+            'weekly_mean_speed': 0,
+        },
+        {
+            'created_at': '2025-02-22T14:06:26.484813Z',
+            'daily_mean_speed': 0,
+            'id': 3,
+            'latest_readings': [],
+            'latitude': 23.750874,
+            'longitude': -75.512717,
+            'name': 'Anemometer 3',
+            'tags': [
+                'desert',
+                'hot-weather',
+            ],
+            'weekly_mean_speed': 0,
+        },
+        {
+            'created_at': '2025-02-22T14:06:26.484813Z',
+            'daily_mean_speed': 0,
+            'id': 4,
+            'latest_readings': [],
+            'latitude': 35.5340375,
+            'longitude': -122.46333,
+            'name': 'Anemometer 4',
+            'tags': [
+                'desert',
+                'high-wind',
+            ],
+            'weekly_mean_speed': 0,
+        },
+        {
+            'created_at': '2025-02-22T14:06:26.484813Z',
+            'daily_mean_speed': 0,
+            'id': 5,
+            'latest_readings': [],
+            'latitude': 35.5340375,
+            'longitude': -122.46333,
+            'name': 'Anemometer 5',
+            'tags': [
+                'mountain',
+                'cold-weather',
+            ],
+            'weekly_mean_speed': 0,
+        },
+        {
+            'created_at': '2025-02-22T14:06:26.484813Z',
+            'daily_mean_speed': 0,
+            'id': 6,
+            'latest_readings': [],
+            'latitude': 35.5340375,
+            'longitude': -122.46333,
+            'name': 'Anemometer 6',
+            'tags': [
+                'urban',
+                'modern-wind',
+            ],
+            'weekly_mean_speed': 0,
+        },
+    ]
+
+@pytest.mark.django_db
 def test_read_anemometer_by_name(client, token):
     AnemometerFactory(name='Test Anemometer')
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
