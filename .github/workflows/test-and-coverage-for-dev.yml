@@ -65,3 +65,25 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           path: result.log
+
+  check-migrations:
+    name: Check Django Migrations
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.dev.txt
+
+      - name: Check for unapplied migrations
+        run: |
+          python manage.py makemigrations --check --dry-run || (echo "Unapplied migrations found." && exit 1)     
