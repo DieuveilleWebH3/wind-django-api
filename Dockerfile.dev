@@ -4,23 +4,44 @@
 FROM python:3.12-slim
 
 # Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV DJANGO_SETTINGS_MODULE=windforlife.settings.dev
+ENV POETRY_HOME="/opt/poetry"
+ENV PATH="${POETRY_HOME}/bin:$PATH"
+# Disable Poetry virtualenvs
+ENV POETRY_VIRTUALENVS_CREATE=false
 
 # Set working directory
 WORKDIR /app
 
-# Install dependencies
-COPY requirements.txt /app
-COPY requirements.dev.txt /app
-RUN pip install --upgrade pip && \
-    pip install -r requirements.dev.txt
+# # Install dependencies
+# COPY requirements.txt /app
+# COPY requirements.dev.txt /app
+# RUN pip install --upgrade pip && \
+#     pip install -r requirements.dev.txt
 
-# Copy application source code
+# Install system dependencies
+RUN apt-get update && apt-get install -y curl build-essential libpq-dev
+
+# Install Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 - && \
+    ln -s $HOME/.local/bin/poetry /usr/local/bin/poetry && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Copy only the dependency files first for caching
+COPY pyproject.toml /app
+COPY poetry.lock /app
+
+# Install dependencies
+RUN poetry install --no-interaction --no-root
+
+# Copy application project files / source code
 COPY . /app
 
 # Expose port for development
 EXPOSE 8000
 
 # Run Django development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000", "--settings=windforlife.settings.dev"]
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000", "--settings=windforlife.settings.dev"]
+CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000", "--settings=windforlife.settings.dev"]
