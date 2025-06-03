@@ -137,6 +137,7 @@ env.bak/
 venv.bak/
 .vscode/
 media/
+all_static/
 
 # Spyder project settings
 .spyderproject
