@@ -134,10 +134,38 @@ WIND-DJANGO-API/
 
 #### Virtual Environment Setup
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
+##### Using Poetry: Activate a virtual environment
+
+   1. **Install Poetry if not already installed**
+
+      ```bash
+      curl -sSL https://install.python-poetry.org | python3 -
+      ```
+
+   2. **Ensure Poetry is in your PATH**
+
+      ```bash
+      export PATH="$HOME/.local/bin:$PATH"
+      ```
+
+   3. **Install dependencies**
+
+      ```bash
+      poetry install
+      ```
+
+   4. **Activate the virtual environment**
+
+      ```bash
+      poetry shell
+      ```
+
+##### Using Pip: Activate a virtual environment
+
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
 
 1. **Install dependencies**
 
@@ -153,7 +181,9 @@ source venv/bin/activate
       pip install -r requirements.prod.txt
       ```
 
-2. **Run the migrations**
+##### Run Project
+
+1. **Run the migrations**
 
    **Dev Environment**
 
@@ -167,7 +197,7 @@ source venv/bin/activate
       python manage.py migrate --settings=windforlife.settings.prod
       ```
 
-3. **Run the server for dev environment**
+2. **Run the server for dev environment**
 
    **Create superuser**
 
@@ -179,7 +209,7 @@ source venv/bin/activate
    python manage.py runserver --settings=windforlife.settings.dev
    ```
 
-4. **Run the server for prod environment**
+3. **Run the server for prod environment**
 
    **Create superuser**
 

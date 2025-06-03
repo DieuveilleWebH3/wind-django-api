@@ -1,0 +1,108 @@
+name: Run Tests and Enforce 100% Prod Coverage
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-coverage-check:
+    name: Prod Coverage Test (${{ github.base_ref }})
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write  # Grant write permissions to post comments
+
+    env:
+      SECRET_KEY: dummy-secret-key-for-ci
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_DB: windforlife
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      # - name: Install dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install -r requirements.dev.txt
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Configure Poetry
+        run: |
+          poetry config virtualenvs.create false
+          poetry install --no-interaction --no-root
+
+      - name: Run tests with coverage
+        run: |
+          pytest --cov=api --cov-report=term --cov-fail-under=100 > result.log || (cat result.log && exit 1)
+          if ! grep -q "test session starts" result.log; then
+            echo "No tests were detected." && exit 1
+          fi
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: htmlcov
+
+      - name: Comment test results on PR
+        if: always()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: result.log
+
+  check-migrations:
+    name: Check Django Migrations
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      # - name: Install dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install -r requirements.dev.txt
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Configure Poetry
+        run: |
+          poetry config virtualenvs.create false
+          poetry install --no-interaction --no-root
+
+      - name: Check for unapplied migrations
+        run: |
+          python manage.py makemigrations --check --dry-run || (echo "Unapplied migrations found." && exit 1)     
