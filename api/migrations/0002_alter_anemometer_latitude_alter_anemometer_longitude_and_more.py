@@ -7,32 +7,36 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0001_initial'),
+        ("api", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='anemometer',
-            name='latitude',
+            model_name="anemometer",
+            name="latitude",
             field=models.FloatField(db_index=True),
         ),
         migrations.AlterField(
-            model_name='anemometer',
-            name='longitude',
+            model_name="anemometer",
+            name="longitude",
             field=models.FloatField(db_index=True),
         ),
         migrations.AlterField(
-            model_name='anemometer',
-            name='name',
+            model_name="anemometer",
+            name="name",
             field=models.CharField(db_index=True, max_length=255, unique=True),
         ),
         migrations.AlterField(
-            model_name='windspeedreading',
-            name='recorded_at',
-            field=models.DateTimeField(db_index=True, default=django.utils.timezone.now),
+            model_name="windspeedreading",
+            name="recorded_at",
+            field=models.DateTimeField(
+                db_index=True, default=django.utils.timezone.now
+            ),
         ),
         migrations.AddIndex(
-            model_name='anemometer',
-            index=models.Index(fields=['latitude', 'longitude'], name='api_anemome_latitud_8bc195_idx'),
+            model_name="anemometer",
+            index=models.Index(
+                fields=["latitude", "longitude"], name="api_anemome_latitud_8bc195_idx"
+            ),
         ),
     ]

@@ -16,16 +16,20 @@ class Anemometer(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['name']
+        ordering = ["name"]
         indexes = [
-            models.Index(fields=['latitude', 'longitude']),  # Composite index for spatial queries
+            models.Index(
+                fields=["latitude", "longitude"]
+            ),  # Composite index for spatial queries
         ]
 
+
 class WindSpeedReading(models.Model):
-    anemometer = models.ForeignKey(Anemometer, on_delete=models.CASCADE, related_name='readings', db_index=True)  # Explicit index
+    anemometer = models.ForeignKey(
+        Anemometer, on_delete=models.CASCADE, related_name="readings", db_index=True
+    )  # Explicit index
     speed_knots = models.FloatField()
     recorded_at = models.DateTimeField(default=now, db_index=True)
 
     class Meta:
-        ordering = ['-recorded_at']
-
+        ordering = ["-recorded_at"]

@@ -9,34 +9,59 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Anemometer',
+            name="Anemometer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255, unique=True)),
-                ('latitude', models.FloatField()),
-                ('longitude', models.FloatField()),
-                ('tags', models.JSONField(default=list)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255, unique=True)),
+                ("latitude", models.FloatField()),
+                ("longitude", models.FloatField()),
+                ("tags", models.JSONField(default=list)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'ordering': ['name'],
+                "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name='WindSpeedReading',
+            name="WindSpeedReading",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('speed_knots', models.FloatField()),
-                ('recorded_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('anemometer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='readings', to='api.anemometer')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("speed_knots", models.FloatField()),
+                (
+                    "recorded_at",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
+                (
+                    "anemometer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="readings",
+                        to="api.anemometer",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-recorded_at'],
+                "ordering": ["-recorded_at"],
             },
         ),
     ]

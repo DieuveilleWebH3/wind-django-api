@@ -5,11 +5,14 @@ from django_filters.filters import CharFilter
 
 
 class AnemometerFilter(django_filters.FilterSet):
-    tags = CharFilter(method='filter_tags', help_text="Filter by tags (comma-separated).")
+    tags = CharFilter(
+        method="filter_tags", help_text="Filter by tags (comma-separated)."
+    )
 
     class Meta:
         model = Anemometer
-        fields = ['tags']
+        fields = ["tags"]
+
     def filter_tags(self, queryset: QuerySet, name: str, value: str) -> QuerySet:
         """
         Filters the queryset based on a comma-separated list of tags.
