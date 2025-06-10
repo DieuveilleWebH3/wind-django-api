@@ -12,3 +12,10 @@ freezegun==1.5.1
 pytest==8.3.4
 pytest-cov==6.0.0
 pytest-django==4.10.0
+
+black==25.1.0
+ruff==0.11.13
+mypy==1.16.0
+pre-commit==4.2.0
+django-stubs==5.2.0
+djangorestframework-stubs==3.16.0

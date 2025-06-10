@@ -23,6 +23,7 @@ The API allows authenticated users to:
 - **Logging**: Integrated **logging system** to track API requests and debugging.
 - **Swagger Documentation**: API documentation accessible via Swagger UI.
 - **Docker Support**: Easily deployable with Docker.
+- **Dependencies handling**: Easily handle packages with Poetry or switch to pip.
 
 ---
 
@@ -83,10 +84,14 @@ WIND-DJANGO-API/
 │   ├── urls.py
 ├── .env
 ├── .gitignore
+├── .pre-commit-config.yaml
 ├── Dockerfile.dev
 ├── Dockerfile.prod
 ├── example.env
 ├── manage.py
+├── mypy.ini
+├── poetry.lock
+├── pyproject.toml
 ├── pytest.ini
 ├── README.md
 ├── requirements.dev.txt
