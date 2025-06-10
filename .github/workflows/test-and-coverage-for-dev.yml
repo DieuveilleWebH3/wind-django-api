@@ -106,4 +106,38 @@ jobs:
 
       - name: Check for unapplied migrations
         run: |
-          python manage.py makemigrations --check --dry-run || (echo "Unapplied migrations found." && exit 1)     
+          python manage.py makemigrations --check --dry-run || (echo "Unapplied migrations found." && exit 1)
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Configure Poetry
+        run: |
+          poetry config virtualenvs.create false
+          poetry install --no-interaction --no-root
+
+      - name: Run Black
+        run: |
+          poetry run black --check .
+
+      - name: Run Ruff
+        run: |
+          poetry run ruff check .
+
+      - name: Run Mypy
+        run: |
+          poetry run mypy .
