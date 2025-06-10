@@ -1,8 +1,8 @@
-from windforlife.settings.base import *
+from windforlife.settings.base import *  # noqa: F401, F403
 import socket
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG", False)
+DEBUG = env.bool("DEBUG", False)  # noqa: F405
 
 if DEBUG:
     # Detect internal IPs for Docker
@@ -15,8 +15,8 @@ ALLOWED_HOSTS = [
 ]
 
 
-INSTALLED_APPS += ["debug_toolbar"]
-MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+INSTALLED_APPS += ["debug_toolbar"]  # noqa: F405
+MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa: F405
 
 
 WSGI_APPLICATION = "windforlife.wsgi.dev.application"
@@ -27,6 +27,6 @@ WSGI_APPLICATION = "windforlife.wsgi.dev.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "db.sqlite3", 
+        "NAME": "db.sqlite3",
     }
 }
